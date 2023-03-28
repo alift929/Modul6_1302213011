@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 public class SayaTubeVideo
 {
@@ -8,6 +9,8 @@ public class SayaTubeVideo
 
 	public SayaTubeVideo(string judul)
 	{
+		Debug.Assert(judul != null);
+		Debug.Assert(judul.Length <= 200);
 		var random = new Random();
 		id = random.Next(10000, 99999);
 		title = judul;
@@ -16,7 +19,17 @@ public class SayaTubeVideo
 
 	public void IncreasePlayCount(int play)
 	{
-		playCount += play;
+		Debug.Assert(play <= 25000000);
+		Debug.Assert(play >= 0);
+		try
+		{
+			int check = checked(playCount += play);
+			playCount += check;
+		}
+		catch (OverflowException e)
+		{
+			Console.WriteLine("Overflow Exception: " + e.Message);
+		}
 	}
 
 	public void PrintVideoDetails()
